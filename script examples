@@ -1,0 +1,10 @@
+#unzip
+for /L %%d in (1,1,24) do "C:\Program Files\7-Zip\7z.exe" x -oC:\data\rawdata C:\data\data%%d.gz
+
+#curl
+for /f "usebackq" %%i in (`PowerShell $date ^= Get-Date^; $date ^= $date.AddDays^(-1^)^; $date.ToString^('yyyy-MM-dd'^)`) do set YESTERDAY=%%i
+echo %YESTERDAY%
+set y=%YESTERDAY:~0,4%
+set m=%YESTERDAY:~5,2%
+set d=%YESTERDAY:~8,2%
+for %%h in (00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23) do curl -i https://id:secret@api.localytics.com/v1/exports/analytics/logs/appkey/%y%/%m%/%d%/%%h
